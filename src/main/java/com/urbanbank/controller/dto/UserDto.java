@@ -34,7 +34,7 @@ public record UserDto(
         model.setAccount(ofNullable(this.account).map(AccountDto::toModel).orElse(null));
         model.setCard(ofNullable(this.card).map(CardDto::toModel).orElse(null));
         model.setFeatures(ofNullable(this.features).orElse(emptyList()).stream().map(FeatureDto::toModel).collect(toList()));
-        model.setNews(ofNullable(this.news).orElse(emptyList()).stream().map(News::toModel).collect(toList()));
+        model.setNews(ofNullable(this.news).orElse(emptyList()).stream().map(NewsDto::toModel).collect(toList()));
         return model;
     }
 }
