@@ -23,14 +23,15 @@ import java.util.stream.Collectors;
 @Tag(name = "Users Controller", description = "RESTful API para gerenciar usuários.")
 public record UserController(UserService userService) {
 
+
     @GetMapping
-    @Operation(Summary = "Obtém todos os usuários", description = "Recuperar uma lista de todos os usuários registrados.")
+    @Operation(summary = "Obtém todos os usuários", description = "Recuperar uma lista de todos os usuários registrados.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operação realizada com sucesso")
     })
     public ResponseEntity<List<UserDto>> findAll() {
         var users = userService.findAll();
-        var usersDto = users.stream().map(userDto::new).collect(Collectors.toList());
+        var usersDto = users.stream().map(UserDto::new).collect(Collectors.toList());
         return ResponseEntity.ok(usersDto);
     }
 
@@ -42,7 +43,7 @@ public record UserController(UserService userService) {
     })
     public ResponseEntity<UserDto> create(@RequestBody UserDto userDto) {
         var user = userService.create(userDto.toModel());
-        URI Location = ServletUriComponentsBuilder.fromCurrentRequest()
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(user.getId())
                 .toUri();
@@ -51,12 +52,12 @@ public record UserController(UserService userService) {
 
     @PutMapping("/{id}")
     @Operation(summary = "Atualiza um usuário", description = "Atualiza os dados de um usuário existente baseado no ID.")
-    @ApiReponses(value = {
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
             @ApiResponse(responseCode = "422", description = "Dados do usuário inválido")
     })
-    public ResponseEntity<UserDto> update(@PathVariable Long id, @ResquestBody UserDto userDto) {
+    public ResponseEntity<UserDto> update(@PathVariable Long id, @RequestBody UserDto userDto) {
         var user = userService.update(id, userDto.toModel());
         return ResponseEntity.ok(new UserDto(user));
     }
@@ -64,7 +65,7 @@ public record UserController(UserService userService) {
     @DeleteMapping("/{id}")
     @Operation(summary = "Deleta um usuário", description = "Deleta um usuário existente baseado no ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Deleta um usuário existente baseado no ID")
+            @ApiResponse(responseCode = "204", description = "Deleta um usuário existente baseado no ID"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     })
     public ResponseEntity<Void> delete(@PathVariable Long id) {
