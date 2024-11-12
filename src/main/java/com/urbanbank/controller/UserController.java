@@ -39,7 +39,18 @@ public record UserController(UserService userService) {
     @Operation(summary = "Obtém um usuário por ID", description = "Recupera um usuário especifico baseado no ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operação realizada com sucesso"),
-            @ApiResponse(responseCode = "422", description = "Dados do usuário inválido")
+            @ApiResponse(responseCode = "422", description = "Dados do usuário inválidos")
+    })
+    public ResponseEntity<UserDto> findById(@PathVariable Long id) {
+        var user = userService.findById(id);
+        return ResponseEntity.ok(new UserDto(user));
+    }
+
+    @PostMapping
+    @Operation(summary = "Cria um novo usuário", description = "Cria um novo usuário e retorna os dados dos usuários criados")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso"),
+            @ApiResponse(responseCode = "422", description = "Dados do usuário inválidos")
     })
     public ResponseEntity<UserDto> create(@RequestBody UserDto userDto) {
         var user = userService.create(userDto.toModel());
@@ -55,7 +66,7 @@ public record UserController(UserService userService) {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
-            @ApiResponse(responseCode = "422", description = "Dados do usuário inválido")
+            @ApiResponse(responseCode = "422", description = "Dados do usuário inválidos")
     })
     public ResponseEntity<UserDto> update(@PathVariable Long id, @RequestBody UserDto userDto) {
         var user = userService.update(id, userDto.toModel());
