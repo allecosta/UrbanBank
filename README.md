@@ -43,4 +43,5 @@ classDiagram
 
 ```
 
-- acessar o H2 via browser: http://localhost:8080/h2-console/
+- Acessar o H2 via browser: http://localhost:8080/h2-console/
+- Testar API via Swagger: http://localhost:8080/swagger-ui/index.html
